@@ -46,6 +46,7 @@ def _make_tsec_test(target):
         )
 
 def _compute_module_name(testonly):
+    return None
     current_pkg = native.package_name()
 
     # For test-only targets we do not compute any module name as
@@ -68,9 +69,10 @@ def _compute_module_name(testonly):
 
 def _getDefaultTsConfig(testonly):
     if testonly:
-        return _DEFAULT_TSCONFIG_TEST
-    else:
         return _DEFAULT_TSCONFIG_BUILD
+
+    # else:
+    return _DEFAULT_TSCONFIG_BUILD
 
 def sass_binary(sourcemap = False, include_paths = [], **kwargs):
     _sass_binary(
@@ -95,38 +97,39 @@ def ts_library(
         prodmode_target = None,
         devmode_module = None,
         **kwargs):
+    pass
     # Add tslib because we use import helpers for all public packages.
-    local_deps = ["@npm//tslib"] + deps
+    # local_deps = ["@npm//tslib"] + deps
 
-    if not tsconfig:
-        tsconfig = _getDefaultTsConfig(testonly)
+    # if not tsconfig:
+    #     tsconfig = _getDefaultTsConfig(testonly)
 
-    # Compute an AMD module name for the target.
-    module_name = _compute_module_name(testonly)
+    # # Compute an AMD module name for the target.
+    # module_name = _compute_module_name(testonly)
 
-    _ts_library(
-        # `module_name` is used for AMD module names within emitted JavaScript files.
-        module_name = module_name,
-        # We use the module name as package name, so that the target can be resolved within
-        # NodeJS executions, by activating the Bazel NodeJS linker.
-        # See: https://github.com/bazelbuild/rules_nodejs/pull/2799.
-        package_name = module_name,
-        # For prodmode, the target is set to `ES2022`. `@bazel/typecript` sets `ES2015` by default. Note
-        # that this should be in sync with the `ng_module` tsconfig generation to emit proper APF v13.
-        # https://github.com/bazelbuild/rules_nodejs/blob/901df3868e3ceda177d3ed181205e8456a5592ea/third_party/github.com/bazelbuild/rules_typescript/internal/common/tsconfig.bzl#L195
-        prodmode_target = prodmode_target if prodmode_target != None else "es2022",
-        # We also set devmode output to the same settings as prodmode as a first step in combining
-        # devmode and prodmode output. We will not rely on AMD output anyway due to the linker processing.
-        devmode_target = devmode_target if devmode_target != None else "es2022",
-        devmode_module = devmode_module if devmode_module != None else "esnext",
-        tsconfig = tsconfig,
-        testonly = testonly,
-        deps = local_deps,
-        **kwargs
-    )
+    # _ts_library(
+    #     # `module_name` is used for AMD module names within emitted JavaScript files.
+    #     module_name = module_name,
+    #     # We use the module name as package name, so that the target can be resolved within
+    #     # NodeJS executions, by activating the Bazel NodeJS linker.
+    #     # See: https://github.com/bazelbuild/rules_nodejs/pull/2799.
+    #     package_name = module_name,
+    #     # For prodmode, the target is set to `ES2022`. `@bazel/typecript` sets `ES2015` by default. Note
+    #     # that this should be in sync with the `ng_module` tsconfig generation to emit proper APF v13.
+    #     # https://github.com/bazelbuild/rules_nodejs/blob/901df3868e3ceda177d3ed181205e8456a5592ea/third_party/github.com/bazelbuild/rules_typescript/internal/common/tsconfig.bzl#L195
+    #     prodmode_target = prodmode_target if prodmode_target != None else "es2022",
+    #     # We also set devmode output to the same settings as prodmode as a first step in combining
+    #     # devmode and prodmode output. We will not rely on AMD output anyway due to the linker processing.
+    #     devmode_target = devmode_target if devmode_target != None else "es2022",
+    #     devmode_module = devmode_module if devmode_module != None else "esnext",
+    #     tsconfig = tsconfig,
+    #     testonly = testonly,
+    #     deps = local_deps,
+    #     **kwargs
+    # )
 
-    if module_name and not testonly:
-        _make_tsec_test(kwargs["name"])
+    # if module_name and not testonly:
+    #     _make_tsec_test(kwargs["name"])
 
 def ng_module(
         deps = [],
