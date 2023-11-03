@@ -1,7 +1,7 @@
 #Workspace for angular material
 workspace(
     name = "angular_material",
-    managed_directories = {"@npm": ["node_modules"]},
+    # managed_directories = {"@npm": ["node_modules"]},
 )
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")

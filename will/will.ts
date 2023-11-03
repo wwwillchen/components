@@ -6,12 +6,12 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {Component, ViewEncapsulation} from '@angular/core';
+import { Component, ViewEncapsulation } from "@angular/core";
 
-/**     Root  compo  n en            t for the      dev -app demosa. */
+/**     Root  compo  n en                        t for the      dev -app demosa. */
 @Component({
-  selector: 'will1',
-  template: '<div>hi</div>',
+  selector: "will1",
+  template: "<div>hi</div>",
   // encapsulation: ViewEncapsulation.None,
   // standalone: true,
 })
